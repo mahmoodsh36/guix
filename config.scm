@@ -17,59 +17,7 @@
                      glib python-xyz python unicode admin certs linux rust
                      crates-io disk imagemagick file haskell-xyz)
 
-(define-public my-sxiv
-  (package
-    (name "sxiv")
-    (version "26")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/mahmoodsheikh36/sxiv")
-                    (commit "e10d3683bf9b26f514763408c86004a6593a2b66")))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "161l59balzh3q8vlya1rs8g97s5s8mwc5lfspxcb2sv83d35410a"))))
-    (build-system gnu-build-system)
-    (arguments
-     `(#:tests? #f                      ; no check target
-       #:make-flags
-       (list (string-append "PREFIX=" %output)
-             (string-append "CC=" ,(cc-for-target))
-             ;; Xft.h #includes <ft2build.h> without ‘freetype2/’.  The Makefile
-             ;; works around this by hard-coding /usr/include & $PREFIX.
-             (string-append "CPPFLAGS=-I"
-                            (assoc-ref %build-inputs "freetype")
-                            "/include/freetype2")
-             "V=1")
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'configure)            ; no configure script
-         (add-after 'install 'install-desktop-file
-           (lambda* (#:key outputs #:allow-other-keys)
-             (install-file "sxiv.desktop"
-                           (string-append (assoc-ref outputs "out")
-                                          "/share/applications"))
-             #t))
-         (add-after 'install 'install-icons
-           (lambda* (#:key make-flags #:allow-other-keys)
-             (apply invoke "make" "-C" "icon" "install" make-flags))))))
-    (inputs
-     `(("freetype" ,freetype)
-       ("giflib" ,giflib)
-       ("imlib2" ,imlib2)
-       ("libexif" ,libexif)
-       ("libx11" ,libx11)
-       ("libxft" ,libxft)))
-    (home-page "https://github.com/muennich/sxiv")
-    (synopsis "Simple X Image Viewer")
-    (description
-     "sxiv is an alternative to feh and qiv.  Its primary goal is to
-provide the most basic features required for fast image viewing.  It has
-vi key bindings and works nicely with tiling window managers.  Its code
-base should be kept small and clean to make it easy for you to dig into
-it and customize it for your needs.")
-    (license gpl2+)))
+(use-modules (packages sxiv))
 
 (define %xorg-libinput-config
   "Section \"InputClass\"
@@ -93,6 +41,8 @@ EndSection
   (timezone "Asia/Jerusalem")
 
   (keyboard-layout (keyboard-layout "us" "altgr-intl"))
+
+  (kernel-loadable-modules (list rtl8812au-aircrack-ng-linux-module))
 
   ;; This is needed to create a bootable USB
   (bootloader (bootloader-configuration
@@ -118,31 +68,34 @@ EndSection
                      fontconfig
                      font-fantasque-sans
                      font-dejavu
-                     font-google-noto
 
                      ;; media
                      mpv feh
-                     my-sxiv
+                     sxiv
 
                      ;; X
                      libinput xf86-video-fbdev
                      xf86-video-nouveau xf86-video-ati xf86-video-vesa
-                     sxhkd xinit
+                     sxhkd
                      awesome
                      sxhkd setxkbmap
                      xorg-server
-                     picom clipit
-                     rofi 
-                     xclip xset
+                     picom
+                     clipit
+                     rofi
+                     xclip
+                     xset
 
                      ;; text editors
                      emacs
                      neovim
 
                      ;; commandline tools
-                     curl git
-                     zsh tmux
-                     alacritty 
+                     curl
+                     git
+                     zsh
+                     tmux
+                     alacritty
                      transmission
                      bat
                      clyrics
@@ -153,6 +106,7 @@ EndSection
                      imagemagick
                      file
                      ffmpeg
+                     sshfs
 
                      ;; other
                      libnotify
@@ -169,6 +123,7 @@ EndSection
                      dbus
                      playerctl
                      hostapd
+                     flatpak
 
                      ;; rust
                      rust
@@ -185,6 +140,11 @@ EndSection
     "sudoers"
     "root ALL=(ALL) ALL
     %wheel ALL=(ALL) NOPASSWD: ALL"))
+
+  (hosts-file
+   (plain-file
+    "hosts"
+    "10.0.0.50 server"))
 
   (services (append (list (service network-manager-service-type)
                           (udev-rules-service 'android android-udev-rules
@@ -211,7 +171,7 @@ EndSection
                         (mount-point "/")
                         (type "ext4"))
                        (file-system
-                        (device (file-system-label "boot"))
+                        (device "/dev/nvme0n1p1")
                         (type "vfat")
                         (mount-point "/boot/efi"))
                        %base-file-systems)))
