@@ -15,7 +15,8 @@
                      freedesktop fontutils web-browsers package-management
                      emacs-xyz ssh cmake pkg-config image music photo android
                      glib python-xyz python unicode admin certs linux rust
-                     crates-io disk imagemagick file haskell-xyz)
+                     crates-io disk imagemagick file haskell-xyz
+                     bootloaders)
 
 (use-modules (packages sxiv))
 
@@ -44,99 +45,67 @@ EndSection
 
  (kernel-loadable-modules (list rtl8812au-aircrack-ng-linux-module))
 
- ;; This is needed to create a bootable USB
- (bootloader (bootloader-configuration
-              (bootloader grub-efi-bootloader)
-              ;;(timeout 1)
-              (targets (list "/boot/efi"))))
+ (bootloader
+  (bootloader-configuration
+   (bootloader grub-efi-bootloader)
+   ;;(timeout 1)
+   (targets (list "/boot/efi"))))
 
- (firmware (append (list iwlwifi-firmware)
-                   %base-firmware))
+ (firmware
+  (append (list iwlwifi-firmware)
+          %base-firmware))
 
- (users (cons* (user-account
-                (name "mahmooz")
-                (group "users")
-                (supplementary-groups '("wheel" "audio" "adbusers"))
-                (shell (file-append zsh "/bin/zsh"))
-                (home-directory "/home/mahmooz"))
-               %base-user-accounts))
+ (users
+  (cons*
+   (user-account
+    (name "mahmooz")
+    (group "users")
+    (supplementary-groups '("wheel" "audio" "adbusers"))
+    (shell (file-append zsh "/bin/zsh"))
+    (home-directory "/home/mahmooz"))
+   %base-user-accounts))
 
- (packages (append (list
-                    nss-certs ;; for https
+ (packages
+  (append
+   (list
+    ;; for https
+    nss-certs
 
-                    ;; fonts
-                    fontconfig
-                    font-fantasque-sans
-                    font-dejavu
+    ;; fonts
+    fontconfig font-fantasque-sans font-dejavu
 
-                    ;; media
-                    mpv feh
-                    sxiv
+    ;; media
+    mpv feh sxiv
 
-                    ;; X
-                    libinput xf86-video-fbdev
-                    xf86-video-nouveau xf86-video-ati xf86-video-vesa
-                    sxhkd
-                    awesome
-                    sxhkd
-                    setxkbmap
-                    xorg-server
-                    picom
-                    clipit
-                    rofi
-                    xclip
-                    xset
-                    xrdb
+    ;; X drivers
+    libinput xf86-video-fbdev xf86-video-nouveau
+    xf86-video-ati xf86-video-vesa
+    ;; X commandline tools
+    setxkbmap xclip xset xrdb scrot
+    ;; X desktop
+    awesome sxhkd xorg-server picom
+    rofi clipit alacritty
 
-                    ;; text editors
-                    neovim
+    ;; text editors
+    neovim
 
-                    ;; commandline tools
-                    curl
-                    git
-                    zsh
-                    tmux
-                    alacritty
-                    transmission
-                    bat
-                    clyrics
-                    scrot
-                    adb
-                    ranger
-                    vifm
-                    imagemagick
-                    file
-                    ffmpeg
-                    youtube-dl
+    ;; shell tools
+    curl git zsh tmux transmission bat clyrics
+    adb ranger vifm imagemagick file ffmpeg
+    youtube-dl
 
-                    ;; emacs
-                    emacs
-                    emacs-guix
-                    emacs-geiser
+    ;; emacs
+    emacs emacs-guix emacs-geiser
 
-                    ;; other
-                    libnotify
-                    network-manager
-                    rsync
-                    pulseaudio pulsemixer
-                    firefox
-                    openssh
-                    cmake
-                    gnu-make
-                    dbus
-                    playerctl
-                    hostapd
-                    flatpak
+    ;; other
+    libnotify network-manager rsync pulseaudio pulsemixer firefox
+    openssh cmake gnu-make dbus playerctl hostapd flatpak
 
-                    ;; rust
-                    rust
-                    rust-cargo-0.53
-
-                    ;; python
-                    python
-                    python-pip
-                    )
-                   %base-packages))
+    ;; programming languages
+    python python-pip
+    rust rust-cargo-0.53
+    )
+   %base-packages))
 
  (sudoers-file
   (plain-file
@@ -149,32 +118,36 @@ EndSection
    "hosts"
    "10.0.0.50 server"))
 
- (services (append (list (service network-manager-service-type)
-                         (udev-rules-service 'android android-udev-rules
-                                             #:groups '("adbusers"))
-                         (service wpa-supplicant-service-type)
-                         (service slim-service-type
-                                  (slim-configuration
-                                   (auto-login? #t)
-                                   (default-user "mahmooz")
-                                   (display ":0")
-                                   (vt "vt2")
-                                   (xorg-configuration (xorg-configuration (extra-config (list %xorg-libinput-config))))))
-                         (service xorg-server-service-type)
-                         (service hostapd-service-type
-                                  (hostapd-configuration
-                                   (interface "wlp0s20f3")
-                                   (ssid "devilspawn")))
-                         (service alsa-service-type (alsa-configuration
-                                                     (pulseaudio? #t))))
-                   %base-services))
+ (services
+  (append
+   (list (service network-manager-service-type)
+         (udev-rules-service 'android android-udev-rules
+                             #:groups '("adbusers"))
+         (service wpa-supplicant-service-type)
+         (service slim-service-type
+                  (slim-configuration
+                   (auto-login? #t)
+                   (default-user "mahmooz")
+                   (display ":0")
+                   (vt "vt2")
+                   (xorg-configuration (xorg-configuration (extra-config (list %xorg-libinput-config))))))
+         (service xorg-server-service-type)
+         (service hostapd-service-type
+                  (hostapd-configuration
+                   (interface "wlp0s20f3")
+                   (ssid "devilspawn")))
+         (service alsa-service-type (alsa-configuration
+                                     (pulseaudio? #t))))
+   %base-services))
 
- (file-systems (cons* (file-system
-                       (device (file-system-label "guix"))
-                       (mount-point "/")
-                       (type "ext4"))
-                      (file-system
-                       (device (file-system-label "boot"))
-                       (type "vfat")
-                       (mount-point "/boot/efi"))
-                      %base-file-systems)))
+ (file-systems
+  (cons*
+   (file-system
+    (device (file-system-label "guix"))
+    (mount-point "/")
+    (type "ext4"))
+   (file-system
+    (device (file-system-label "boot"))
+    (type "vfat")
+    (mount-point "/boot/efi"))
+   %base-file-systems)))
