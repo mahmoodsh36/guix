@@ -16,7 +16,7 @@
                      emacs-xyz ssh cmake pkg-config image music photo android
                      glib python-xyz python unicode admin certs linux rust
                      crates-io disk imagemagick file haskell-xyz
-                     bootloaders)
+                     bootloaders compression node)
 
 (use-modules (packages sxiv))
 
@@ -92,7 +92,7 @@ EndSection
     ;; shell tools
     curl git zsh tmux transmission bat clyrics
     adb ranger vifm imagemagick file ffmpeg
-    youtube-dl
+    youtube-dl unzip
 
     ;; emacs
     emacs emacs-guix emacs-geiser
@@ -104,6 +104,7 @@ EndSection
     ;; programming languages
     python python-pip
     rust rust-cargo-0.53
+    node
     )
    %base-packages))
 
@@ -116,7 +117,11 @@ EndSection
  (hosts-file
   (plain-file
    "hosts"
-   "10.0.0.50 server"))
+   "10.0.0.50 server
+    127.0.0.1 youtube.com
+    127.0.0.1 www.youtube.com
+    127.0.0.1 instagram.com
+    127.0.0.1 www.instagram.com"))
 
  (services
   (append
@@ -132,10 +137,6 @@ EndSection
                    (vt "vt2")
                    (xorg-configuration (xorg-configuration (extra-config (list %xorg-libinput-config))))))
          (service xorg-server-service-type)
-         (service hostapd-service-type
-                  (hostapd-configuration
-                   (interface "wlp0s20f3")
-                   (ssid "devilspawn")))
          (service alsa-service-type (alsa-configuration
                                      (pulseaudio? #t))))
    %base-services))
