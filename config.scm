@@ -16,7 +16,8 @@
                      emacs-xyz ssh cmake pkg-config image music photo android
                      glib python-xyz python unicode admin certs linux rust
                      crates-io disk imagemagick file haskell-xyz
-                     bootloaders compression node)
+                     bootloaders compression node python-web
+                     code networking)
 
 (use-modules (packages sxiv))
 
@@ -48,12 +49,12 @@ EndSection
  (bootloader
   (bootloader-configuration
    (bootloader grub-efi-bootloader)
-   ;;(timeout 1)
+   (timeout 1)
    (targets (list "/boot/efi"))))
 
  (firmware
-  (append (list iwlwifi-firmware)
-          %base-firmware))
+   (append (list iwlwifi-firmware)
+           %base-firmware))
 
  (users
   (cons*
@@ -92,7 +93,7 @@ EndSection
     ;; shell tools
     curl git zsh tmux transmission bat clyrics
     adb ranger vifm imagemagick file ffmpeg
-    youtube-dl unzip
+    youtube-dl unzip the-silver-searcher fzf
 
     ;; emacs
     emacs emacs-guix emacs-geiser
@@ -100,11 +101,13 @@ EndSection
     ;; other
     libnotify network-manager rsync pulseaudio pulsemixer firefox
     openssh cmake gnu-make dbus playerctl hostapd flatpak
+    bluez
 
     ;; programming languages
-    python python-pip
+    python python-pip python-flask python-requests
     rust rust-cargo-0.53
     node
+
     )
    %base-packages))
 
@@ -138,7 +141,8 @@ EndSection
                    (xorg-configuration (xorg-configuration (extra-config (list %xorg-libinput-config))))))
          (service xorg-server-service-type)
          (service alsa-service-type (alsa-configuration
-                                     (pulseaudio? #t))))
+                                     (pulseaudio? #t)))
+         (bluetooth-service #:auto-enable? #t))
    %base-services))
 
  (file-systems
