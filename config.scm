@@ -17,7 +17,7 @@
                      glib python-xyz python unicode admin certs linux rust
                      crates-io disk imagemagick file haskell-xyz
                      bootloaders compression node python-web
-                     code networking)
+                     code networking irc)
 
 (use-modules (packages sxiv))
 
@@ -74,6 +74,7 @@ EndSection
 
     ;; fonts
     fontconfig font-fantasque-sans font-dejavu
+    font-google-noto ;; for emojis
 
     ;; media
     mpv feh sxiv
@@ -85,29 +86,37 @@ EndSection
     setxkbmap xclip xset xrdb scrot
     ;; X desktop
     awesome sxhkd xorg-server picom
-    rofi clipit alacritty
+    rofi clipit kitty libnotify
+
+    ;; networking tools
+    curl git transmission irssi
+    clyrics yt-dlp network-manager
+    rsync openssh irssi
+
+    ;; web
+    firefox
 
     ;; text editors
     neovim
 
     ;; shell tools
-    curl git zsh tmux transmission bat clyrics
-    adb ranger vifm imagemagick file ffmpeg
-    youtube-dl unzip the-silver-searcher fzf
+    zsh tmux bat adb ranger vifm imagemagick
+    file ffmpeg unzip the-silver-searcher fzf
 
     ;; emacs
     emacs emacs-guix emacs-geiser
 
-    ;; other
-    libnotify network-manager rsync pulseaudio pulsemixer firefox
-    openssh cmake gnu-make dbus playerctl hostapd flatpak
+    ;; audio/bluetooth
+    pulseaudio pulsemixer
     bluez
+
+    ;; other
+    cmake gnu-make dbus playerctl flatpak
 
     ;; programming languages
     python python-pip python-flask python-requests
     rust rust-cargo-0.53
     node
-
     )
    %base-packages))
 
@@ -119,12 +128,7 @@ EndSection
 
  (hosts-file
   (plain-file
-   "hosts"
-   "10.0.0.50 server
-    127.0.0.1 youtube.com
-    127.0.0.1 www.youtube.com
-    127.0.0.1 instagram.com
-    127.0.0.1 www.instagram.com"))
+   "hosts" "10.0.0.50 server"))
 
  (services
   (append
@@ -155,4 +159,9 @@ EndSection
     (device (file-system-label "boot"))
     (type "vfat")
     (mount-point "/boot/efi"))
+   (file-system
+    (device (file-system-label "nixos"))
+    (mount-point "mnt")
+    (type "ext4")
+    (mount-may-fail? #f))
    %base-file-systems)))
