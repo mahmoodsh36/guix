@@ -17,7 +17,8 @@
                      glib python-xyz python unicode admin certs linux rust
                      crates-io disk imagemagick file haskell-xyz
                      bootloaders compression node python-web
-                     code networking irc)
+                     code networking irc libreoffice tex pdf sqlite
+                     gcc sdl commencement)
 
 (use-modules (packages sxiv))
 
@@ -52,9 +53,7 @@ EndSection
    (timeout 1)
    (targets (list "/boot/efi"))))
 
- (firmware
-   (append (list iwlwifi-firmware)
-           %base-firmware))
+ (firmware (list linux-firmware))
 
  (users
   (cons*
@@ -83,7 +82,7 @@ EndSection
     libinput xf86-video-fbdev xf86-video-nouveau
     xf86-video-ati xf86-video-vesa
     ;; X commandline tools
-    setxkbmap xclip xset xrdb scrot
+    setxkbmap xclip xset xrdb scrot zip
     ;; X desktop
     awesome sxhkd xorg-server picom
     rofi clipit kitty libnotify
@@ -94,7 +93,11 @@ EndSection
     rsync openssh irssi
 
     ;; web
-    firefox
+    ;;firefox
+    qutebrowser
+
+    ;; data
+    sqlite
 
     ;; text editors
     neovim
@@ -107,16 +110,19 @@ EndSection
     emacs emacs-guix emacs-geiser
 
     ;; audio/bluetooth
-    pulseaudio pulsemixer
+    pulseaudio pulsemixer pipewire
     bluez
 
     ;; other
-    cmake gnu-make dbus playerctl flatpak
+    cmake gnu-make dbus playerctl flatpak libreoffice
+    zathura zathura-pdf-poppler
 
     ;; programming languages
     python python-pip python-flask python-requests
     rust rust-cargo-0.53
     node
+    texlive
+    sdl gcc-toolchain
     )
    %base-packages))
 
@@ -154,14 +160,16 @@ EndSection
    (file-system
     (device (file-system-label "guix"))
     (mount-point "/")
-    (type "ext4"))
+    (type "ext4")
+    (mount-may-fail? #t))
    (file-system
     (device (file-system-label "boot"))
     (type "vfat")
-    (mount-point "/boot/efi"))
+    (mount-point "/boot/efi")
+    (mount-may-fail? #t))
    (file-system
     (device (file-system-label "nixos"))
     (mount-point "mnt")
     (type "ext4")
-    (mount-may-fail? #f))
+    (mount-may-fail? #t))
    %base-file-systems)))
