@@ -18,9 +18,10 @@
                      crates-io disk imagemagick file haskell-xyz
                      bootloaders compression node python-web
                      code networking irc libreoffice tex pdf sqlite
-                     gcc sdl commencement)
+                     gcc sdl commencement audio)
 
 (use-modules (packages sxiv))
+(use-modules (packages python-arp-scan))
 
 (define %xorg-libinput-config
   "Section \"InputClass\"
@@ -82,7 +83,7 @@ EndSection
     libinput xf86-video-fbdev xf86-video-nouveau
     xf86-video-ati xf86-video-vesa
     ;; X commandline tools
-    setxkbmap xclip xset xrdb scrot zip
+    setxkbmap xclip xset xrdb scrot zip acpi
     ;; X desktop
     awesome sxhkd xorg-server picom
     rofi clipit kitty libnotify
@@ -90,7 +91,7 @@ EndSection
     ;; networking tools
     curl git transmission irssi
     clyrics yt-dlp network-manager
-    rsync openssh irssi
+    rsync openssh irssi nmap tcpdump
 
     ;; web
     ;;firefox
@@ -118,10 +119,9 @@ EndSection
     zathura zathura-pdf-poppler
 
     ;; programming languages
-    python python-pip python-flask python-requests
+    python python-pip python-flask python-requests python-pyaudio
     rust rust-cargo-0.53
     node
-    texlive
     sdl gcc-toolchain
     )
    %base-packages))
@@ -166,10 +166,5 @@ EndSection
     (device (file-system-label "boot"))
     (type "vfat")
     (mount-point "/boot/efi")
-    (mount-may-fail? #t))
-   (file-system
-    (device (file-system-label "nixos"))
-    (mount-point "mnt")
-    (type "ext4")
     (mount-may-fail? #t))
    %base-file-systems)))
