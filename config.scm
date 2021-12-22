@@ -104,7 +104,7 @@ EndSection
     neovim
 
     ;; shell tools
-    zsh tmux bat adb ranger vifm imagemagick
+    zsh tmux adb ranger vifm imagemagick
     file ffmpeg unzip the-silver-searcher fzf
 
     ;; emacs
