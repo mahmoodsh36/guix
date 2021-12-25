@@ -20,7 +20,7 @@
   #:use-module (guix packages))
 
 (use-package-modules certs curl version-control gnome rsync tmux vim file compression
-                     compression terminals python python-web)
+                     compression terminals python python-web ssh)
 
 (define-public %my-base-packages
   (append
@@ -28,7 +28,7 @@
     nss-certs ;; for https
 
     ;; networking tools
-    curl git network-manager rsync
+    curl git network-manager rsync openssh
 
     ;; some commandline tools
     tmux neovim zsh file unzip fzf
@@ -63,7 +63,7 @@
     (user-account
      (name "mahmooz")
      (group "users")
-     (supplementary-groups '("wheel"))
+     (supplementary-groups '("wheel" "audio"))
      (shell (file-append zsh "/bin/zsh"))
      (home-directory "/home/mahmooz")))
    %base-user-accounts))
@@ -78,7 +78,6 @@
    (kernel-loadable-modules (list rtl8812au-aircrack-ng-linux-module))
    (firmware (cons* iwlwifi-firmware
                     %base-firmware))
-
    (bootloader
     (bootloader-configuration
      (bootloader grub-efi-bootloader)
@@ -86,7 +85,7 @@
      (targets (list "/boot/efi"))))
 
    (users %my-base-users)
-
+   (groups %base-groups)
    (packages %my-base-packages)
 
    (sudoers-file
@@ -94,9 +93,10 @@
      "sudoers"
      "root ALL=(ALL) ALL
       %wheel ALL=(ALL) NOPASSWD: ALL"))
-
    (hosts-file
     (plain-file
      "hosts" "10.0.0.50 server"))
 
    (file-systems %my-file-systems)))
+
+%my-base-os

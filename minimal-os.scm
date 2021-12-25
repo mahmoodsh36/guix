@@ -1,12 +1,17 @@
 (define-module (minimal-os)
   #:use-module (gnu)
+  #:use-module (nongnu packages fonts) ;; for microsoft core web fonts
   #:use-module (base-os))
 
 (use-service-modules desktop xorg)
-(use-package-modules gcc sdl node crates-io rust python pdf android fontutils fonts
-                     audio commencement python-web python-xyz python base cmake pulseaudio
+(use-package-modules gcc sdl node crates-io rust python pdf android fontutils fonts package-management
+                     audio commencement python-web python-xyz python base cmake pulseaudio vim
                      emacs sqlite web-browsers admin rsync music linux bittorrent gnome terminals
-                     gtk compton wm freedesktop xorg xdisorg compression video image-viewers)
+                     gtk compton wm freedesktop xorg xdisorg compression video image-viewers code
+                     emacs-xyz)
+
+(use-modules (packages scrcpy))
+(use-modules (packages sxiv))
 
 (define %xorg-libinput-config
   "Section \"InputClass\"
@@ -27,7 +32,7 @@ EndSection
   (append
    (list
     ;; fonts
-    fontconfig font-fantasque-sans font-dejavu
+    fontconfig font-fantasque-sans font-dejavu font-microsoft-web-core-fonts
     font-google-noto ;; for emojis
 
     ;; media
@@ -37,21 +42,24 @@ EndSection
     libinput xf86-video-fbdev xf86-video-nouveau
     xf86-video-ati xf86-video-vesa
     ;; X commandline tools
-    setxkbmap xclip xset xrdb scrot zip acpi
+    setxkbmap xclip xset xrdb scrot zip acpi xprop xwininfo
     ;; X desktop
     awesome sxhkd xorg-server picom
     rofi clipit kitty libnotify
 
     ;; networking tools
     transmission yt-dlp clyrics rsync nmap tcpdump
-    qutebrowser
+    qutebrowser nyxt
 
     ;; data
     sqlite
 
     ;; other
-    emacs
+    emacs the-silver-searcher emacs-geiser emacs-geiser-guile
     zathura zathura-pdf-poppler
+    flatpak
+    vifm
+    adb scrcpy
 
     ;; audio/bluetooth
     pulseaudio pulsemixer pipewire
@@ -71,7 +79,7 @@ EndSection
 (define-public %my-minimal-services
   (append
    (list (udev-rules-service 'android android-udev-rules
-                             #:groups '("adb"))
+                             #:groups '("adbusers"))
          (service slim-service-type
                   (slim-configuration
                    (auto-login? #t)
@@ -88,3 +96,5 @@ EndSection
    (inherit %my-base-os)
    (packages %my-minimal-packages)
    (services %my-minimal-services)))
+
+%my-minimal-os
