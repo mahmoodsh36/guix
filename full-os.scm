@@ -4,11 +4,11 @@
   #:use-module (gnu services virtualization)
   #:use-module (minimal-os))
 
-(use-package-modules tex libreoffice pdf imagemagick virtualization)
+(use-package-modules tex libreoffice pdf imagemagick virtualization video)
 
 (define-public %my-full-packages
   (append
-   (list texlive firefox libreoffice imagemagick qemu virt-manager)
+   (list texlive firefox libreoffice imagemagick qemu virt-manager ffmpeg)
    %my-minimal-packages))
 
 (define-public %my-full-os
