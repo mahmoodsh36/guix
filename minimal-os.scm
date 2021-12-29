@@ -49,10 +49,7 @@ EndSection
 
     ;; networking tools
     transmission yt-dlp clyrics rsync nmap tcpdump
-    qutebrowser nyxt
-
-    ;; data
-    sqlite
+    qutebrowser nyxt network-manager-applet
 
     ;; other
     emacs the-silver-searcher emacs-geiser emacs-geiser-guile
@@ -60,6 +57,7 @@ EndSection
     flatpak
     vifm
     adb scrcpy
+    sqlite
 
     ;; audio/bluetooth
     pulseaudio pulsemixer pipewire
