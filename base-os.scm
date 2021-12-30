@@ -95,7 +95,7 @@
       %wheel ALL=(ALL) NOPASSWD: ALL"))
    (hosts-file
     (plain-file
-     "hosts" "10.0.0.50 server"))
+     "hosts" "157.230.112.219 server"))
 
    (file-systems %my-file-systems)))
 
