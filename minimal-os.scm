@@ -1,10 +1,10 @@
 (define-module (minimal-os)
   #:use-module (gnu)
-  #:use-module (nongnu packages fonts) ;; for microsoft core web fonts
+  #:use-module (gnu packages fonts)
   #:use-module (base-os))
 
 (use-service-modules desktop xorg)
-(use-package-modules gcc sdl node crates-io rust python pdf android fontutils fonts package-management
+(use-package-modules gcc sdl node crates-io rust python pdf android fontutils package-management
                      audio commencement python-web python-xyz python base cmake pulseaudio vim
                      emacs sqlite web-browsers admin rsync music linux bittorrent gnome terminals
                      gtk compton wm freedesktop xorg xdisorg compression video image-viewers code
@@ -32,8 +32,7 @@ EndSection
   (append
    (list
     ;; fonts
-    fontconfig font-fantasque-sans font-dejavu font-microsoft-web-core-fonts
-    font-google-noto ;; for emojis
+    fontconfig font-fantasque-sans font-dejavu
 
     ;; media
     mpv feh sxiv
