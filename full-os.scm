@@ -1,6 +1,7 @@
 (define-module (full-os)
   #:use-module (gnu)
   #:use-module (nongnu packages mozilla)
+  #:use-module (gnu packages fonts)
   #:use-module (gnu services virtualization)
   #:use-module (minimal-os))
 
@@ -8,7 +9,9 @@
 
 (define-public %my-full-packages
   (append
-   (list texlive firefox libreoffice imagemagick qemu virt-manager ffmpeg)
+   (list
+    font-google-noto
+    texlive firefox libreoffice imagemagick qemu virt-manager ffmpeg)
    %my-minimal-packages))
 
 (define-public %my-full-os
