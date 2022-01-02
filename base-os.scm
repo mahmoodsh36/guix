@@ -44,7 +44,7 @@
          (service alsa-service-type (alsa-configuration (pulseaudio? #t))))
    %base-services))
 
-(define-public %my-file-systems
+(define-public %my-base-file-systems
   (cons*
    (file-system
     (device (file-system-label "guix"))
@@ -97,6 +97,6 @@
     (plain-file
      "hosts" "157.230.112.219 server"))
 
-   (file-systems %my-file-systems)))
+   (file-systems %my-base-file-systems)))
 
 %my-base-os
