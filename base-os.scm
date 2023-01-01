@@ -75,7 +75,6 @@
    (host-name "mahmooz")
    (timezone "Asia/Jerusalem")
    (keyboard-layout (keyboard-layout "us" "altgr-intl"))
-   (kernel-loadable-modules (list rtl8812au-aircrack-ng-linux-module))
    (firmware (cons* iwlwifi-firmware
                     %base-firmware))
    (bootloader
