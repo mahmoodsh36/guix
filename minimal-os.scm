@@ -8,9 +8,9 @@
                      audio commencement python-web python-xyz python base cmake pulseaudio vim
                      emacs sqlite web-browsers admin rsync music linux bittorrent gnome terminals
                      gtk compton wm freedesktop xorg xdisorg compression video image-viewers code
-                     emacs-xyz)
+                     emacs-xyz python-build)
 
-(use-modules (packages scrcpy))
+;(use-modules (packages scrcpy))
 (use-modules (packages sxiv))
 
 (define %xorg-libinput-config
@@ -55,7 +55,7 @@ EndSection
     zathura zathura-pdf-poppler
     flatpak
     vifm
-    adb scrcpy
+    adb ;;scrcpy
     sqlite
 
     ;; audio/bluetooth
@@ -67,7 +67,7 @@ EndSection
 
     ;; programming languages
     python python-pip python-flask python-requests python-pyaudio
-    rust rust-cargo-0.53
+    ;;rust rust-cargo-0.53
     node
     sdl gcc-toolchain)
    %my-base-packages))
