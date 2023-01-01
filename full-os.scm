@@ -1,6 +1,7 @@
 (define-module (full-os)
   #:use-module (gnu)
   #:use-module (nongnu packages mozilla)
+  #:use-module (nongnu packages chrome)
   #:use-module (gnu packages fonts)
   #:use-module (gnu services virtualization)
   #:use-module (minimal-os))
@@ -11,7 +12,7 @@
   (append
    (list
     font-google-noto
-    texlive firefox libreoffice imagemagick qemu virt-manager ffmpeg)
+    texlive libreoffice imagemagick qemu virt-manager ffmpeg google-chrome-stable)
    %my-minimal-packages))
 
 (define-public %my-full-os
