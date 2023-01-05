@@ -12,7 +12,7 @@
   (append
    (list
     font-google-noto texlive libreoffice imagemagick qemu
-    virt-manager ffmpeg google-chrome-stable inkscape sagemath)
+    virt-manager ffmpeg google-chrome-stable inkscape)
    %my-minimal-packages))
 
 (define-public %my-full-os
