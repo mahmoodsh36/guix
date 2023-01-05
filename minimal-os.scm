@@ -32,7 +32,7 @@ EndSection
   (append
    (list
     ;; fonts
-    fontconfig font-fantasque-sans font-dejavu
+    fontconfig font-fantasque-sans font-dejavu font-iosevka
 
     ;; media
     mpv feh sxiv
@@ -41,7 +41,7 @@ EndSection
     libinput xf86-video-fbdev xf86-video-nouveau
     xf86-video-ati xf86-video-vesa
     ;; X commandline tools
-    setxkbmap xclip xset xrdb scrot zip acpi xprop xwininfo
+    setxkbmap xclip xset xrdb scrot zip acpi xprop xwininfo xdg-utils
     ;; X desktop
     awesome sxhkd xorg-server picom
     rofi clipit kitty libnotify
@@ -69,7 +69,7 @@ EndSection
     python python-pip python-flask python-requests python-pyaudio
     ;;rust rust-cargo-0.53
     node
-    sdl gcc-toolchain)
+    sdl2 gcc-toolchain)
    %my-base-packages))
 
 

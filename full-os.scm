@@ -6,13 +6,13 @@
   #:use-module (gnu services virtualization)
   #:use-module (minimal-os))
 
-(use-package-modules tex libreoffice pdf imagemagick virtualization video)
+(use-package-modules tex libreoffice pdf imagemagick virtualization video inkscape)
 
 (define-public %my-full-packages
   (append
    (list
-    font-google-noto
-    texlive libreoffice imagemagick qemu virt-manager ffmpeg google-chrome-stable)
+    font-google-noto texlive libreoffice imagemagick qemu
+    virt-manager ffmpeg google-chrome-stable inkscape sagemath)
    %my-minimal-packages))
 
 (define-public %my-full-os

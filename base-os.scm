@@ -1,5 +1,7 @@
 (define-module (base-os)
   #:use-module (nongnu packages linux)
+  #:use-module (guix channels)
+  #:use-module (guix inferior)
   #:use-module (gnu)
   #:use-module (gnu packages linux)
   #:use-module (gnu bootloader)
@@ -17,6 +19,7 @@
   #:use-module (gnu system accounts)
   #:use-module (gnu packages shells)
   #:use-module (gnu system shadow)
+  #:use-module (gnu services virtualization)
   #:use-module (guix packages))
 
 (use-package-modules certs curl version-control gnome rsync tmux vim file compression
@@ -41,7 +44,11 @@
   (append
    (list (service network-manager-service-type)
          (service wpa-supplicant-service-type)
-         (service alsa-service-type (alsa-configuration (pulseaudio? #t))))
+         (service alsa-service-type (alsa-configuration (pulseaudio? #t)))
+         (service libvirt-service-type
+         (libvirt-configuration
+          (unix-sock-group "libvirt")
+          (tls-port "16555"))))
    %base-services))
 
 (define-public %my-base-file-systems
@@ -62,6 +69,7 @@
    (list
     (user-account
      (name "mahmooz")
+     (password "mahmooz")
      (group "users")
      (supplementary-groups '("wheel" "audio"))
      (shell (file-append zsh "/bin/zsh"))
@@ -94,7 +102,10 @@
       %wheel ALL=(ALL) NOPASSWD: ALL"))
    (hosts-file
     (plain-file
-     "hosts" "157.230.112.219 server"))
+     "hosts"
+     "157.230.112.219 server
+127.0.0.1 youtube.com
+127.0.0.1 www.youtube.com"))
 
    (file-systems %my-base-file-systems)))
 
