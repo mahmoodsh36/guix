@@ -85,7 +85,8 @@ EndSection
                    (vt "vt2")
                    (xorg-configuration (xorg-configuration (extra-config (list %xorg-libinput-config))))))
          (service xorg-server-service-type)
-         (bluetooth-service #:auto-enable? #t))
+         ;;(bluetooth-service #:auto-enable? #t)
+         )
    %my-base-services))
 
 (define-public %my-minimal-os

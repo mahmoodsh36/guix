@@ -6,7 +6,7 @@
   #:use-module (gnu services virtualization)
   #:use-module (minimal-os))
 
-(use-package-modules tex libreoffice pdf imagemagick virtualization video inkscape)
+(use-package-modules tex texlive libreoffice pdf imagemagick virtualization video inkscape)
 
 (define-public %my-full-packages
   (append

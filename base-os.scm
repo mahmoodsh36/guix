@@ -12,6 +12,7 @@
   #:use-module (gnu services networking)
   #:use-module (gnu services sound)
   #:use-module (gnu services base)
+  #:use-module (gnu services ssh)
   #:use-module (gnu system file-systems)
   #:use-module (gnu system)
   #:use-module (gnu system keyboard)
@@ -44,6 +45,7 @@
   (append
    (list (service network-manager-service-type)
          (service wpa-supplicant-service-type)
+         (service openssh-service-type)
          (service alsa-service-type (alsa-configuration (pulseaudio? #t)))
          (service libvirt-service-type
          (libvirt-configuration
