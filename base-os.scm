@@ -73,7 +73,7 @@
      (name "mahmooz")
      (password "mahmooz")
      (group "users")
-     (supplementary-groups '("wheel" "audio"))
+     (supplementary-groups '("wheel" "audio" "video"))
      (shell (file-append zsh "/bin/zsh"))
      (home-directory "/home/mahmooz")))
    %base-user-accounts))
@@ -94,7 +94,7 @@
      (targets (list "/boot/efi"))))
 
    (users %my-base-users)
-   (groups %base-groups)
+   (groups (cons* "video" %base-groups))
    (packages %my-base-packages)
 
    (sudoers-file
@@ -102,12 +102,12 @@
      "sudoers"
      "root ALL=(ALL) ALL
       %wheel ALL=(ALL) NOPASSWD: ALL"))
-   (hosts-file
-    (plain-file
-     "hosts"
-     "157.230.112.219 server
-127.0.0.1 youtube.com
-127.0.0.1 www.youtube.com"))
+;;   (hosts-file
+;;    (plain-file
+;;     "hosts"
+;;     "157.230.112.219 server
+;;127.0.0.1 youtube.com
+;;127.0.0.1 www.youtube.com"))
 
    (file-systems %my-base-file-systems)))
 
