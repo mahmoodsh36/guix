@@ -1,12 +1,12 @@
 (define-module (base-os)
   #:use-module (nongnu packages linux)
-  #:use-module (guix channels)
   #:use-module (guix inferior)
   #:use-module (gnu)
   #:use-module (gnu packages linux)
   #:use-module (gnu bootloader)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages package-management)
   #:use-module (gnu packages)
   #:use-module (gnu services)
   #:use-module (gnu services networking)
@@ -47,10 +47,12 @@
          (service wpa-supplicant-service-type)
          (service openssh-service-type)
          (service alsa-service-type (alsa-configuration (pulseaudio? #t)))
+         ;; (simple-service 'channels home-channels-service-type %my-channels)
          (service libvirt-service-type
          (libvirt-configuration
           (unix-sock-group "libvirt")
-          (tls-port "16555"))))
+          (tls-port "16555"))
+         ))
    %base-services))
 
 (define-public %my-base-file-systems

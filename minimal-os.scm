@@ -1,7 +1,8 @@
 (define-module (minimal-os)
   #:use-module (gnu)
   #:use-module (gnu packages fonts)
-  #:use-module (base-os))
+  #:use-module (base-os)
+  #:use-module (guix channels))
 
 (use-service-modules desktop xorg)
 (use-package-modules gcc sdl node crates-io rust python pdf android fontutils package-management
@@ -72,6 +73,45 @@ EndSection
     sdl2 gcc-toolchain)
    %my-base-packages))
 
+(define-public %my-channels
+  (append
+   (list
+    ;; (channel
+    ;;  (name 'guix-science)
+    ;;  (url "https://codeberg.org/guix-science/guix-science")
+    ;;  (branch "master")
+    ;;  (introduction
+    ;;   (make-channel-introduction
+    ;;    "b1fe5aaff3ab48e798a4cce02f0212bc91f423dc"
+    ;;    (openpgp-fingerprint
+    ;;     "CA4F 8CF4 37D7 478F DA05  5FD4 4213 7701 1A37 8446"))))
+    (channel
+     (name 'guix)
+     (url "https://codeberg.org/guix/guix-mirror")
+     ;; (branch "master")
+     )
+    (channel
+     (name 'nonguix)
+     (url "https://gitlab.com/nonguix/nonguix")
+     (introduction
+      (make-channel-introduction
+       "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
+       (openpgp-fingerprint
+        "2A39 3FFF 68F4 EF7A 3D29  12AF 6F51 20A0 22FB B2D5"))))
+    (channel
+     (name 'guix-science-nonfree)
+     (url "https://codeberg.org/guix-science/guix-science-nonfree.git")
+     (introduction
+      (make-channel-introduction
+       "58661b110325fd5d9b40e6f0177cc486a615817e"
+       (openpgp-fingerprint
+        "CA4F 8CF4 37D7 478F DA05  5FD4 4213 7701 1A37 8446"))))
+    )
+   %default-channels))
+
+(define %nonguix-key
+  (plain-file "nonguix.pub"
+              "(public-key (ecc (curve Ed25519) (q #C1FD53E5D4CE971933EC50C9F307AE2171A2D3B52C804642A7A35F84F3A4EA98#)))"))
 
 (define-public %my-minimal-services
   (append
@@ -93,6 +133,31 @@ EndSection
   (operating-system
    (inherit %my-base-os)
    (packages %my-minimal-packages)
-   (services %my-minimal-services)))
+   (services
+    (modify-services
+     %my-minimal-services
+     (guix-service-type
+      config => (guix-configuration
+                 (inherit config)
+                 (guix (guix-for-channels %my-channels))
+                 (authorize-key? #t)
+                 (authorized-keys
+                  (cons* %nonguix-key
+                         %default-authorized-guix-keys))
+                 (substitute-urls
+                  '("https://substitutes.nonguix.org"
+                    "https://guix.bordeaux.inria.fr/"
+                    "https://hydra-guix-129.guix.gnu.org/"
+                    "https://bordeaux-singapore-mirror.cbaines.net/"
+                    "https://packages.pantherx.org/"
+                    "https://mirror.sjtu.edu.cn/guix/"
+                    "http://ci.guix.trop.in"
+                    "https://guix.tobias.gr/substitutes/"
+                    "http://substitutes.guix.sama.re/"))
+                 (channels %my-channels)
+                 ;; (extra-options '("--max-jobs=6"
+                 ;;                  "--cores=0"))
+                 ))))
+   ))
 
 %my-minimal-os

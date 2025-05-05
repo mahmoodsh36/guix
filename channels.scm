@@ -1,4 +1,8 @@
-(cons* (channel
-        (name 'nonguix)
-        (url "https://gitlab.com/nonguix/nonguix"))
-       %default-channels)
+(list
+ (channel
+  (name 'guix)
+  (url "https://git.savannah.gnu.org/git/guix.git"))
+ (channel
+  (name 'nonguix)
+  (url "https://gitlab.com/nonguix/nonguix.git"))
+ )
