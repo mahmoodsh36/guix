@@ -10,7 +10,8 @@
      "BBB0 2DDF 2CEA F6A8 0D1D  E643 A2A0 6DF2 A33A 54FA"))))
  (channel
   (name 'nonguix)
-  (url "https://gitlab.com/nonguix/nonguix")
+  ;; (url "https://gitlab.com/nonguix/nonguix")
+  (url "https://github.com/nonguix/nonguix")
   (introduction
    (make-channel-introduction
     "897c1a470da759236cc11798f4e0a5f7d4d59fbc"
