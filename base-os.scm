@@ -29,7 +29,7 @@
 (define-public %my-base-packages
   (append
    (list
-    nss-certs ;; for https
+    ;; nss-certs ;; for https, its now included by default
 
     ;; networking tools
     curl git network-manager rsync openssh
